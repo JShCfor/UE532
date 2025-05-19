@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Configuration xmlns="https://www.unrealengine.com/BuildConfiguration">
+    <WindowsPlatform>
+        <CompilerVersion>14.34.31933</CompilerVersion>
+        <WindowsSdkVersion>10.0.19041.0</WindowsSdkVersion>
+    </WindowsPlatform>
+</Configuration>
