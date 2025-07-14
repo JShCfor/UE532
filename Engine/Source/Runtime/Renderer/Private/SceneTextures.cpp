@@ -771,6 +771,15 @@ void FSceneTextureExtracts::Release()
 	CustomDepth = {};
 	UniformBuffer = {};
 	MobileUniformBuffer = {};
+
+#pragma region Das
+	//释放缺少
+	DasDepth = {};
+	DasStencil = {};
+	DasCustom = {};
+	DasCustomDepthOn = {};
+#pragma endregion
+
 }
 
 static TGlobalResource<FSceneTextureExtracts> GSceneTextureExtracts;

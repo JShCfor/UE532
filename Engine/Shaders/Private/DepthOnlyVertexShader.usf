@@ -14,8 +14,13 @@ struct FDepthOnlyVSToPS
 {
 	float4 Position : SV_POSITION;
 	//add Das
+	//UE5.3 粒子冲突
+#if !NEEDS_PARTICLE_RANDOM && !USE_PARTICLE_SUBUVS && !USE_PARTICLE_TIME && !USE_PARTICLE_TIME
 	float DasSelect : TEXCOORD4;
+#endif
+#if !NEEDS_PARTICLE_COLOR
 	float DasBatchID : TEXCOORD5;
+#endif
 	#if !MATERIALBLENDING_SOLID || OUTPUT_PIXEL_DEPTH_OFFSET
 		FVertexFactoryInterpolantsVSToPS FactoryInterpolants;
 		float4 PixelPosition : TEXCOORD6;
@@ -98,18 +103,29 @@ void Main(
 #endif
 
 //add Das 3DTiles BatchID
+#if !NEEDS_PARTICLE_COLOR
 	Output.DasBatchID = 0;
+#endif
+#if !NEEDS_PARTICLE_RANDOM && !USE_PARTICLE_SUBUVS && !USE_PARTICLE_TIME && !USE_PARTICLE_TIME
 	Output.DasSelect = 0;
+#endif
+
 #if NUM_MATERIAL_TEXCOORDS_VERTEX >= 8
+#if !NEEDS_PARTICLE_COLOR
 	Output.DasBatchID = VertexParameters.TexCoords[7].x * 1024 + VertexParameters.TexCoords[7].y;
+#endif
 #endif
 	
 //Instance steniclID
 #if (USE_INSTANCING || USE_INSTANCE_CULLING) && USES_PER_INSTANCE_CUSTOM_DATA
 	if(VertexParameters.CustomDataCount > 0)
 	{
+#if !NEEDS_PARTICLE_COLOR
 		Output.DasBatchID = GetPerInstanceCustomData(VertexParameters, 0, 0);
+#endif
+#if !NEEDS_PARTICLE_RANDOM && !USE_PARTICLE_SUBUVS && !USE_PARTICLE_TIME && !USE_PARTICLE_TIME
 		Output.DasSelect = GetPerInstanceCustomData(VertexParameters, 1, 0);
+#endif
 	}
 #endif
 }

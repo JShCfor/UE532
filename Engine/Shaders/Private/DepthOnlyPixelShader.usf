@@ -35,8 +35,13 @@ float4 IntValue2Color(int nValue)
 void Main(
 #if !MATERIALBLENDING_SOLID || OUTPUT_PIXEL_DEPTH_OFFSET
 	in INPUT_POSITION_QUALIFIERS float4 SvPosition : SV_Position,
+
+#if !NEEDS_PARTICLE_RANDOM && !USE_PARTICLE_SUBUVS && !USE_PARTICLE_TIME && !USE_PARTICLE_TIME
 	in float DasSelect : TEXCOORD4,//add Das 3Dtiles的i3dm的状态信息
+#endif
+#if !NEEDS_PARTICLE_COLOR
 	in float DasBatchID : TEXCOORD5,//add Das 3Dtiles的Batch信息
+#endif
 #endif
 
 #if !MATERIALBLENDING_SOLID || OUTPUT_PIXEL_DEPTH_OFFSET
@@ -119,8 +124,8 @@ void Main(
 
 	#if MATERIALBLENDING_TRANSLUCENT
 		//add Das 透明材质点选不受透明度限制
-		if(DasStencil == 0)
-			clip(GetMaterialOpacity(PixelMaterialInputs) - GetMaterialOpacityMaskClipValue());
+		//if(DasStencil == 0)
+		clip(MaterialOpacity - GetMaterialOpacityMaskClipValue());
 	#elif MATERIALBLENDING_MASKED_USING_COVERAGE
 		OutCoverage = DiscardMaterialWithPixelCoverage(MaterialParameters, PixelMaterialInputs);
 	#else
@@ -150,8 +155,12 @@ void Main(
 	float fCustom0 = 0;
 #if !MATERIALBLENDING_SOLID || OUTPUT_PIXEL_DEPTH_OFFSET
 	//深度信息
+#if !NEEDS_PARTICLE_COLOR
 	nBatchID = floor(DasBatchID) + (frac(DasBatchID) > 0.5 ? 1 : 0);
+#endif
+#if !NEEDS_PARTICLE_RANDOM && !USE_PARTICLE_SUBUVS && !USE_PARTICLE_TIME && !USE_PARTICLE_TIME
 	nDasSelect = floor(DasSelect) + (frac(DasSelect) > 0.5 ? 1 : 0);
+#endif
 	fCustom0 = ceil(GetMaterialCustomData0(MaterialParameters));//3Dtiles b3dm的state信息
 #endif
 	
