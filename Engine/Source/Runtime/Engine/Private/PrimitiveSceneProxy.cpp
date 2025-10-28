@@ -1160,7 +1160,7 @@ void FPrimitiveSceneProxy::SetDasStencilValue_GameThread(const int32 value)
 {
 	check(IsInGameThread());
 
-	ENQUEUE_RENDER_COMMAND(FSetEVStencilValue)(
+	ENQUEUE_RENDER_COMMAND(FSetDasStencilValue)(
 		[this, value](FRHICommandList& RHICmdList)
 		{
 			this->SetDasStencilValue_RenderThread(value);
